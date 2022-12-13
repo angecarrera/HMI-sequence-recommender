@@ -3,7 +3,6 @@ from Recommender.graph.graphFunctions import *
 
 
 class MarkovChainRecommender(ISequentialRecommender):
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
     def __init__(self, order):
         """
@@ -16,8 +15,8 @@ class MarkovChainRecommender(ISequentialRecommender):
     def fit(self, train_data):
 
         sequences = train_data.interactionwu_prep.values
-        logging.info('Building Markov Chain model ' + str(self.order))
-        logging.info('Adding nodes')
+        logging.debug('Building Markov Chain model ' + str(self.order))
+        logging.debug('Adding nodes')
         self.count_dict, self.G = add_nodes_to_graph_ngrams(sequences, self.order)
         # Visualizing is only possible in 1st Order
         if self.order == 1:

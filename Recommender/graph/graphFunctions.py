@@ -1,3 +1,5 @@
+import logging
+
 import networkx as nx
 from pprint import pprint
 import matplotlib.pyplot as plt
@@ -25,7 +27,7 @@ def add_nodes_to_graph_ngrams(seqs, N):
 
     # nodes correspond to states
     G.add_nodes_from(list(model.keys()))
-    print(f'Nodes:\n{G.nodes()}\n')
+    logging.debug(f'Nodes:\n{G.nodes()}\n')
 
     # edges represent transition probabilities
     for k, v in model.items():
@@ -36,7 +38,7 @@ def add_nodes_to_graph_ngrams(seqs, N):
 
 
 def show_graph(G):
-    pprint(G.edges(data=True))
+    #pprint(G.edges(data=True))
 
     pos = nx.spring_layout(G, seed=15)  # positions for all nodes - seed for reproducibility
     colors = range(len(G.nodes))
@@ -48,7 +50,7 @@ def show_graph(G):
     # edge weight labels
     nx.draw_networkx_edges(G, pos, width=0.25, edge_color="tab:blue", alpha=0.5, style="dashed", arrows=True,
                            arrowstyle="-", )
-    labels = {(n1, n2): d['count'] for n1, n2, d in G.edges(data=True)}
+    labels = {(n1, n2): d['probability'] for n1, n2, d in G.edges(data=True)}
 
     edge_labels = nx.draw_networkx_edge_labels(G, pos=nx.spring_layout(G, seed=15), edge_labels=labels, font_size=5)
 

@@ -1,3 +1,5 @@
+import logging
+
 import numpy as np
 
 precision_metrics = []
@@ -130,10 +132,8 @@ def sequential_evaluation(recommender,
             user = users[i]
         else:
             user = None
-        print("************Sequence:", test_seq, "*************")
-        # sp= plt.subplots(len(test_seq), 1, figsize=(7, 5), sharex=True)
+        logging.debug("Sequence:{}".format(test_seq) )
         if scroll:
-
             r = sequence_sequential_evaluation(recommender,
                                                test_seq,
                                                evaluation_functions,
@@ -154,7 +154,6 @@ def sequential_evaluation(recommender,
                                   top_n)
             metrics += r
             results.append(r)
-        print("*************************")
     return metrics / len(test_sequences), np.array(results)
 
 
@@ -173,20 +172,20 @@ def evaluate_sequence(recommender, seq, evaluation_functions, user, given_k, loo
         given_k = len(seq) + given_k
 
     user_profile = seq[:given_k]
-    print("User profile", user_profile)
+    logging.debug("-User profile: {}".format(user_profile))
 
     ground_truth = seq[given_k:]
     # restrict ground truth to look_ahead
     ground_truth = ground_truth[:look_ahead] if look_ahead != 'all' else ground_truth
     ground_truth = list(map(lambda x: [x], ground_truth))  # list of list format
-    print("Ground truth", ground_truth)
+    logging.debug("-Ground truth: {}".format(ground_truth))
 
     if not user_profile or not ground_truth:
         # if any of the two missing all evaluation functions are 0
         return np.zeros(len(evaluation_functions))
 
     r = recommender.recommend(user_profile, user)[:top_n]
-    print("prediction", r, top_n)
+    logging.debug("-Prediction: {}".format(r))
 
     if not r:
         # no recommendation found
@@ -197,8 +196,8 @@ def evaluate_sequence(recommender, seq, evaluation_functions, user, given_k, loo
     for f in evaluation_functions:
         tmp_results.append(f(ground_truth, reco_list))
 
-    print(tmp_results)
-    print("-----------------------------------")
+
+    logging.debug("-".center(50,"-"))
 
     return np.array(tmp_results)
 
@@ -212,7 +211,6 @@ def sequence_sequential_evaluation(recommender, seq, evaluation_functions, user,
     for gk in range(given_k, len(seq), step):
         eval_res += evaluate_sequence(recommender, seq, evaluation_functions, user, gk, look_ahead, top_n)
         eval_cnt += 1
-    print("sequence metrics->", eval_res / eval_cnt)
     precision_metrics.append((eval_res / eval_cnt)[0])
     recall_metrics.append((eval_res / eval_cnt)[1])
     return eval_res / eval_cnt
@@ -245,7 +243,7 @@ def eval_seqreveal(recommender, test, train, user_flg=0):
                                         step=STEP)
     else:
         test_sequences = get_test_sequences(test, GIVEN_K)
-        print('{} sequences available for evaluation'.format(len(test_sequences)))
+        print('-Sequences available for evaluation: {} sequences. \n-Results: '.format(len(test_sequences)))
         results = sequential_evaluation(recommender,
                                         test_sequences=test_sequences,
                                         given_k=GIVEN_K,

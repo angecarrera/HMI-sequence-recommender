@@ -1,11 +1,12 @@
 import logging
-
 """Abstract Recommender class"""
 
 
 class ISequentialRecommender(object):
 
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.getLogger('matplotlib.font_manager').setLevel(logging.ERROR)
+    logging.getLogger('PIL').setLevel(logging.ERROR)
     logger = logging.getLogger()
 
     def __init__(self ):
