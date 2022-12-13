@@ -1,10 +1,12 @@
 import logging
-
 import numpy as np
 
 precision_metrics = []
 recall_metrics = []
-
+"""
+Sequential evaluation edited from:
+https://sparsh-ai.github.io/
+"""
 
 def get_test_sequences(test_data, given_k):
     # we can run evaluation only over sequences longer than abs(LAST_K)
