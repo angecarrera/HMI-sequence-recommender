@@ -223,38 +223,23 @@ TOPN = 3  # length of the recommendation list taking the average of the existing
 
 
 # collapse
-def eval_seqreveal(recommender, test, train, user_flg=0):
+def eval_seqreveal(recommender, test):
     GIVEN_K = 1
     LOOK_AHEAD = 1
     STEP = 1
 
-    if user_flg:
-        test_sequences, test_users = get_test_sequences_and_users(test, GIVEN_K, train.user.values)
-        print(
-            '{} Sequences available for evaluation ({} users)'.format(len(test_sequences), len(np.unique(test_users))))
-        results = sequential_evaluation(recommender,
-                                        test_sequences=test_sequences,
-                                        users=test_users,
-                                        given_k=GIVEN_K,
-                                        look_ahead=LOOK_AHEAD,
-                                        evaluation_functions=METRICS.values(),
-                                        top_n=TOPN,
-                                        scroll=True,  # scrolling averages metrics over all profile lengths
-                                        step=STEP)
-    else:
-        test_sequences = get_test_sequences(test, GIVEN_K)
-        print('-Sequences available for evaluation: {} sequences. \n-Results: '.format(len(test_sequences)))
-        results = sequential_evaluation(recommender,
-                                        test_sequences=test_sequences,
-                                        given_k=GIVEN_K,
-                                        look_ahead=LOOK_AHEAD,
-                                        evaluation_functions=METRICS.values(),
-                                        top_n=TOPN,
-                                        scroll=True,  # scrolling averages metrics over all profile lengths
-                                        step=STEP)
 
-    # print('Sequential evaluation (GIVEN_K={}, LOOK_AHEAD={}, STEP={})'.format(GIVEN_K, LOOK_AHEAD, STEP))
-    # for mname, mvalue in zip(METRICS.keys(), results):
-    #     print('\t{}@{}: {:.4f}'.format(mname, TOPN, mvalue))
+    test_sequences = get_test_sequences(test, GIVEN_K)
+    print('-Sequences available for evaluation: {} sequences. \n-Results: '.format(len(test_sequences)))
+    results = sequential_evaluation(recommender,
+                                    test_sequences=test_sequences,
+                                    given_k=GIVEN_K,
+                                    look_ahead=LOOK_AHEAD,
+                                    evaluation_functions=METRICS.values(),
+                                    top_n=TOPN,
+                                    scroll=True,  # scrolling averages metrics over all profile lengths
+                                    step=STEP)
+
+
 
     return [results, GIVEN_K, LOOK_AHEAD, STEP]

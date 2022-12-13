@@ -46,11 +46,12 @@ def main():
     train, test = last_session_out_split(df)
 
     print("Train sessions: {} - Test sessions: {}".format(len(train), len(test)))
-    execute_recommender(train, test)
+
+    execute_recommender(train, test, maxOrder=3)
 
 
-def execute_recommender(train, test):
-    maxOrder = 3
+def execute_recommender(train, test, maxOrder):
+
     list_MC = []
     for i in range(1, maxOrder + 1):
         mc_recommender = MarkovChainRecommender(i)
@@ -61,7 +62,7 @@ def execute_recommender(train, test):
 
     results_metrics = {"Metrics": [], "mean": [], "Model": [], "sd": []}
     for model in list_MC:
-        results = eval_seqreveal(model, test, train)
+        results = eval_seqreveal(model, test)
         dicResults = {
             "Model": type(model).__name__,
             "ORDER" : model.order,
