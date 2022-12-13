@@ -1,8 +1,12 @@
-from Recommender.ISequentialRecommender import *
 from Recommender.graph.graphFunctions import *
+import logging
 
 
-class MarkovChainRecommender(ISequentialRecommender):
+class MarkovChainRecommender():
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.getLogger('matplotlib.font_manager').setLevel(logging.ERROR)
+    logging.getLogger('PIL').setLevel(logging.ERROR)
+    logger = logging.getLogger()
 
     def __init__(self, order):
         """
@@ -50,3 +54,17 @@ class MarkovChainRecommender(ISequentialRecommender):
 
     def _set_graph_debug(self, G):
         self.G = G
+
+    @staticmethod
+    def get_recommendation_list(recommendation):
+        return list(map(lambda x: x[0], recommendation))
+
+    @staticmethod
+    def get_recommendation_confidence_list(recommendation):
+        return list(map(lambda x: x[1], recommendation))
+
+    def activate_debug_print(self):
+        self.logger.setLevel(logging.DEBUG)
+
+    def deactivate_debug_print(self):
+        self.logger.setLevel(logging.INFO)
