@@ -10,5 +10,6 @@ Python program using Markov Chains to provide a sequential recommendation system
 
 ## Related Article:
 
+Structured dataset of human-machine interactions: Enabling Adaptive User Interfaces
 
 
