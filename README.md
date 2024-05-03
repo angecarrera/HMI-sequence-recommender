@@ -1,6 +1,6 @@
-# HMI_SequenceRecommender
+# Human-Machine Interactions - Sequential recommendation system
 
-Python program using Markov Chains to provide a sequential recommendation system.
+Python program using Markov Chains to provide a sequential recommendation system using human-machine interactions.
 
 ## How to use?
 
